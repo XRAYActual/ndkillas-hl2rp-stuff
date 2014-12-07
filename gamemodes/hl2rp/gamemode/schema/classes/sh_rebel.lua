@@ -1,9 +1,9 @@
-CLASS.name = "Rebel"
+CLASS.name = "REBEL"
 CLASS.faction = FACTION_REBEL
-CLASS.model = Model("models/player/eli.mdl")
+CLASS.model = Model("models/combine_soldier.mdl")
 
 function CLASS:PlayerCanJoin(client)
 	
 end
 
-CLASS_Rebal = CLASS.index
+CLASS_REBEL = CLASS.index
