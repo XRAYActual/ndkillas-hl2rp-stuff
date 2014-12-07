@@ -17,7 +17,7 @@ end
 function SCHEMA:CanPlayerDispatch(client)
 	if (CLIENT and !client) then client = LocalPlayer() end
 	
-	return client:IsCombineRank(nut.config.scannerRanks) or client:IsCombineRank(nut.config.cpEliteRanks) or client:Team() == FACTION_OW or client:IsSuperAdmin()
+	return client:IsCombineRank(nut.config.scannerRanks) or client:IsCombineRank(nut.config.cpEliteRanks) or client:Team() == FACTION_OW
 end
 
 -- Player extensions here.
