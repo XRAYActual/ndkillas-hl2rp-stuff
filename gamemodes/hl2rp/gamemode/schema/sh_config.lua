@@ -1,9 +1,9 @@
 -- The prefix that goes before names of civil protection units.
-nut.config.cpPrefix = "UU-C17.CPU-UNION."
+nut.config.cpPrefix = "UU-C17:CPU-UNION."
 -- The number of digits that follow the name.
 nut.config.cpNumDigits = 5
 -- The prefix that goes before names of combine soldiers.
-nut.config.owPrefix = "UU-C17.OTA."
+nut.config.owPrefix = "UU-C17:OTA."
 -- The number of digits that follows the name.
 nut.config.owNumDigits = 3
 -- The amount of time in SECONDS someone must wait to get their next ration. (Default 30 mins.)
