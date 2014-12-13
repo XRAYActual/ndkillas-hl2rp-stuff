@@ -2,6 +2,58 @@
 resource.AddWorkshop("104491619")
 resource.AddWorkshop("105042805")
 
+-- A function to bust down a door.
+function Schema:BustDownDoor(player, door, force)
+	door.bustedDown = true;
+	
+	door:SetNotSolid(true);
+	door:DrawShadow(false);
+	door:SetNoDraw(true);
+	door:EmitSound("physics/wood/wood_box_impact_hard3.wav");
+	door:Fire("Unlock", "", 0);
+	
+	if (IsValid(door.combineLock)) then
+		door.combineLock:Explode();
+		door.combineLock:Remove();
+	end;
+	
+	if (IsValid(door.breach)) then
+		door.breach:BreachEntity();
+	end;
+	
+	local fakeDoor = ents.Create("prop_physics");
+	
+	fakeDoor:SetCollisionGroup(COLLISION_GROUP_WORLD);
+	fakeDoor:SetAngles( door:GetAngles() );
+	fakeDoor:SetModel( door:GetModel() );
+	fakeDoor:SetSkin( door:GetSkin() );
+	fakeDoor:SetPos( door:GetPos() );
+	fakeDoor:Spawn();
+	
+	local physicsObject = fakeDoor:GetPhysicsObject();
+	
+	if (IsValid(physicsObject)) then
+		if (!force) then
+			if (IsValid(player)) then
+				physicsObject:ApplyForceCenter( (door:GetPos() - player:GetPos() ):GetNormal() * 10000 );
+			end;
+		else
+			physicsObject:ApplyForceCenter(force);
+		end;
+	end;
+	
+	Clockwork.entity:Decay(fakeDoor, 300);
+	
+	Clockwork.kernel:CreateTimer("reset_door_"..door:EntIndex(), 300, 1, function()
+		if (IsValid(door)) then
+			door.bustedDown = nil;
+			door:SetNotSolid(false);
+			door:DrawShadow(true);
+			door:SetNoDraw(false);
+		end;
+	end);
+end;
+
 function SCHEMA:CreatePlayerScanner(client, class)
 	if (IsValid(client.scanner) or client:CharClass() != CLASS_CP_SCN) then
 		return
