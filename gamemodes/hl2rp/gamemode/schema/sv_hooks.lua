@@ -15,6 +15,38 @@ function SCHEMA:DoPlayerDeath(client)
 		return true
 	end
 end
+-- Called when a player attempts to breach an entity.
+function Schema:PlayerCanBreachEntity(player, entity)
+	if (string.lower( entity:GetClass() ) == "func_door_rotating") then
+		return false;
+	end;
+	
+	if (Clockwork.entity:IsDoor(entity)) then
+		if (!Clockwork.entity:IsDoorFalse(entity)) then
+			return true;
+		end;
+	end;
+end;
+-- Called when an entity has been breached.
+function Schema:EntityBreached(entity, activator)
+	if (Clockwork.entity:IsDoor(entity)) then
+		if (!IsValid(entity.combineLock)) then
+			if (!IsValid(activator) or string.lower( entity:GetClass() ) != "prop_door_rotating") then
+				Clockwork.entity:OpenDoor(entity, 0, true, true);
+			else
+				self:BustDownDoor(activator, entity);
+			end;
+		elseif (IsValid(activator) and activator:IsPlayer() and self:PlayerIsCombine(activator)) then
+			if (string.lower( entity:GetClass() ) == "prop_door_rotating") then
+				entity.combineLock:ActivateSmokeCharge( (entity:GetPos() - activator:GetPos() ):GetNormal() * 10000 );
+			else
+				entity.combineLock:SetFlashDuration(2);
+			end;
+		else
+			entity.combineLock:SetFlashDuration(2);
+		end;
+	end;
+end;
 
 function SCHEMA:PlayerDeath(client, inflictor, attacker)
 	if (client:IsCombine()) then
